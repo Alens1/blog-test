@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+    'blog.apps.BlogConfig',
+    'comments.apps.CommentsConfig',
+    "haystack",  # 搜索
+    'pure_pagination',  # 分页
 
 ]
 
@@ -75,10 +78,15 @@ WSGI_APPLICATION = 'blogproject.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(os.path.join(BASE_DIR, 'db.sqlite3')),
-    }
+    'default':
+        {
+            'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
+            'NAME': 'blog',  # 数据库名称
+            'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
+            'PORT': 3306,  # 端口
+            'USER': 'root',  # 数据库用户名
+            'PASSWORD': 'lyc9966@',  # 数据库密码
+        }
 }
 
 # Password validation
@@ -129,3 +137,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+# 搜索
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        "URL": "",
+        "INDEX_NAME": "mysite-mysql-undeploy",
+    },
+}
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
+
+enable = os.environ.get("ENABLE_HAYSTACK_REALTIME_SIGNAL_PROCESSOR", "yes")
+if enable in {"true", "True", "yes"}:
+    HAYSTACK_SIGNAL_PROCESSOR = "haystack.signals.RealtimeSignalProcessor"
+
+HAYSTACK_CUSTOM_HIGHLIGHTER = "blog.utils.Highlighter"
+# HAYSTACK_DEFAULT_OPERATOR = 'AND'
+# HAYSTACK_FUZZY_MIN_SIM = 0.1
+
+# django-pure-pagination 分页设置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 4,  # 分页条当前页前后应该显示的总页数（两边均匀分布，因此要设置为偶数），
+    'MARGIN_PAGES_DISPLAYED': 2,  # 分页条开头和结尾显示的页数
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,  # 当请求了不存在页，显示第一页
+}
