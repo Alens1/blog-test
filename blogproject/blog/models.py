@@ -56,11 +56,19 @@ class Post(models.Model):
     created_time = models.DateTimeField('创建时间', default=timezone.now)
     views = models.PositiveIntegerField(default=0, editable=False)
 
+    def __str__(self):
+        return self.title
+
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         self.modified_time = timezone.now()
+        md = markdown.Markdown(extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+        ])
+        self.excerpt = strip_tags(md.convert(self.body))[:54]
         super().save(*args, **kwargs)  # 覆写数据，只修改了modified_time
 
     def increase_views(self):

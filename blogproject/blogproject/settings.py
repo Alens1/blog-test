@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'comments.apps.CommentsConfig',
     "haystack",  # 搜索
     'pure_pagination',  # 分页
+    'login.apps.LoginConfig',
+    'captcha',  # 验证码
 
 ]
 
@@ -67,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
+
             ],
         },
     },
@@ -112,14 +116,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -131,8 +134,7 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "blogproject", 'media/').replace('\\','/')
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
@@ -162,3 +164,5 @@ PAGINATION_SETTINGS = {
     'MARGIN_PAGES_DISPLAYED': 2,  # 分页条开头和结尾显示的页数
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,  # 当请求了不存在页，显示第一页
 }
+
+LOGIN_REDIRECT_URL = '/'

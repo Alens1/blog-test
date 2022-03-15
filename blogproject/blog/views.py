@@ -5,6 +5,7 @@ from .models import Post, Category, Tag
 from django.views.generic import ListView, DetailView
 from pure_pagination.mixins import PaginationMixin
 from django.contrib import messages
+import markdown
 
 
 class IndexView(PaginationMixin, ListView):
@@ -18,9 +19,7 @@ class ArchiveView(IndexView):
     def get_queryset(self):
         year = self.kwargs.get("year")
         month = self.kwargs.get("month")
-        return (
-            super().get_queryset().filter(created_time__year=year, created_time__month=month)
-        )
+        return super().get_queryset().filter(created_time__year=year, created_time__month=month)
 
 
 class CategoryView(IndexView):

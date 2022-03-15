@@ -40,11 +40,21 @@
                     </div>
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-left">
                             <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="首页">首页</a></li>
-                            <li class="cl-effect-11"><a href="" data-hover="博客">博客</a></li>
                             <li class="cl-effect-11"><a href="" data-hover="关于">关于</a></li>
                             <li class="cl-effect-11"><a href="" data-hover="联系">联系</a></li>
+                            {% if request.session.is_login %}
+
+                                  <li><a href="/logout/">退出</a></li>
+                                  <li style=color:red;><a href="#" >当前在线：{{ request.session.user_name }} </a></li>
+                                  <img width="8%" height="8%" src="/media/{{ request.session.user_avatar }}" alt="头像显示异常">
+
+                            {% else %}
+                                  <li><a href="/login/">登录</a></li>
+                                  <li><a href="/register/">注册</a></li>
+                            {% endif %}
+
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </nav>
@@ -115,6 +125,9 @@
     <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
     <nav>
         <ul>
+
+
+
             <li><a href="{% url 'blog:index' %}">首页</a></li>
             <li><a href="">博客</a></li>
             <li><a href="">关于</a></li>
